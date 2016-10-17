@@ -232,10 +232,6 @@ public class XFactory {
         return m.isResolved();
     }
 
-    public static String canonicalizeString(String s) {
-        return DescriptorFactory.canonicalizeString(s);
-    }
-
     /**
      * Create an XMethod object from a BCEL Method.
      *

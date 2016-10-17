@@ -68,7 +68,6 @@ import edu.umd.cs.findbugs.ba.XMethod;
 import edu.umd.cs.findbugs.ba.ch.Subtypes2;
 import edu.umd.cs.findbugs.bcel.OpcodeStackDetector;
 import edu.umd.cs.findbugs.classfile.CheckedAnalysisException;
-import edu.umd.cs.findbugs.classfile.DescriptorFactory;
 import edu.umd.cs.findbugs.classfile.Global;
 import edu.umd.cs.findbugs.classfile.IAnalysisCache;
 import edu.umd.cs.findbugs.classfile.MethodDescriptor;
@@ -612,7 +611,7 @@ public class OpcodeStack implements Constants2 {
 
         public Item(Item it, String signature) {
             this(it);
-            this.signature = DescriptorFactory.canonicalizeString(signature);
+            this.signature = signature;
             if (constValue instanceof Number) {
                 Number constantNumericValue = (Number) constValue;
                 if ("B".equals(signature)) {
@@ -644,7 +643,7 @@ public class OpcodeStack implements Constants2 {
         }
 
         public Item(String signature, FieldAnnotation f) {
-            this.signature = DescriptorFactory.canonicalizeString(signature);
+            this.signature = signature;
             setSpecialKindFromSignature();
             if (f != null) {
                 source = XFactory.createXField(f);
@@ -653,7 +652,7 @@ public class OpcodeStack implements Constants2 {
         }
 
         public Item(String signature, FieldAnnotation f, int fieldLoadedFromRegister) {
-            this.signature = DescriptorFactory.canonicalizeString(signature);
+            this.signature = signature;
             if (f != null) {
                 source = XFactory.createXField(f);
             }
@@ -699,7 +698,7 @@ public class OpcodeStack implements Constants2 {
         }
 
         public Item(String signature, Object constantValue) {
-            this.signature = DescriptorFactory.canonicalizeString(signature);
+            this.signature = signature;
             setSpecialKindFromSignature();
             constValue = constantValue;
             if (constantValue instanceof Integer) {
@@ -3572,20 +3571,11 @@ public class OpcodeStack implements Constants2 {
     }
 
     private void setTop(boolean top) {
-        if (top) {
-            if (!this.top) {
-                this.top = true;
-            }
-        } else if (this.top) {
-            this.top = false;
-        }
+        this.top = top;
     }
 
     public boolean isTop() {
-        if (top) {
-            return true;
-        }
-        return false;
+        return top;
     }
 
     void setReachOnlyByBranch(boolean reachOnlyByBranch) {

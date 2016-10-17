@@ -74,9 +74,9 @@ public abstract class PackageMemberAnnotation extends BugAnnotationWithSourceLin
         }
         if (className.indexOf('/') >= 0) {
             assert false : "classname " + className + " should be dotted";
-        className = className.replace('/', '.');
+            className = className.replace('/', '.');
         }
-        this.className = DescriptorFactory.canonicalizeString(className);
+        this.className = className;
         this.sourceFileName = sourceFileName;
         if (description != null) {
             description = description.intern();

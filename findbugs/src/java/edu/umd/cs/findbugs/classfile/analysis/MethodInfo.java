@@ -293,10 +293,10 @@ public class MethodInfo extends MethodDescriptor implements XMethod {
         this.exceptions = exceptions;
         if (exceptions != null) {
             for (int i = 0; i < exceptions.length; i++) {
-                exceptions[i] = DescriptorFactory.canonicalizeString(exceptions[i]);
+                exceptions[i] = exceptions[i];
             }
         }
-        this.methodSourceSignature = DescriptorFactory.canonicalizeString(methodSourceSignature);
+        this.methodSourceSignature = methodSourceSignature;
         this.methodAnnotations = Util.immutableMap(methodAnnotations);
         this.methodParameterAnnotations = Util.immutableMap(methodParameterAnnotations);
         if (isUnconditionalThrower) {

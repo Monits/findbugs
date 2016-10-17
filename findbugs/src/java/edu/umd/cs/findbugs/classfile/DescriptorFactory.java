@@ -37,7 +37,6 @@ import edu.umd.cs.findbugs.classfile.analysis.MethodInfo;
 import edu.umd.cs.findbugs.internalAnnotations.DottedClassName;
 import edu.umd.cs.findbugs.internalAnnotations.SlashedClassName;
 import edu.umd.cs.findbugs.util.ClassName;
-import edu.umd.cs.findbugs.util.MapCache;
 
 /**
  * Factory for creating ClassDescriptors, MethodDescriptors, and
@@ -66,21 +65,6 @@ public class DescriptorFactory {
         this.dottedClassDescriptorMap = new HashMap<String, ClassDescriptor>();
         this.methodDescriptorMap = new HashMap<MethodDescriptor, MethodDescriptor>();
         this.fieldDescriptorMap = new HashMap<FieldDescriptor, FieldDescriptor>();
-    }
-
-    private final MapCache<String, String> stringCache = new MapCache<String, String>(10000);
-
-    public static String canonicalizeString(@CheckForNull String s) {
-        if (s == null) {
-            return s;
-        }
-        DescriptorFactory df =  instanceThreadLocal.get();
-        String cached = df.stringCache.get(s);
-        if (cached != null) {
-            return cached;
-        }
-        df.stringCache.put(s, s);
-        return s;
     }
 
     /**
@@ -122,7 +106,6 @@ public class DescriptorFactory {
     public @Nonnull
     ClassDescriptor getClassDescriptor(@SlashedClassName String className) {
         assert className.indexOf('.') == -1;
-        className = canonicalizeString(className);
         ClassDescriptor classDescriptor = classDescriptorMap.get(className);
         if (classDescriptor == null) {
             classDescriptor = new ClassDescriptor(className);
@@ -185,7 +168,6 @@ public class DescriptorFactory {
         int total = 0;
         int keys = 0;
         int values = 0;
-        int bad = 0;
         for (Map.Entry<MethodDescriptor, MethodDescriptor> e : methodDescriptorMap.entrySet()) {
             total++;
             if (e.getKey() instanceof MethodInfo) {
