@@ -20,7 +20,7 @@ package edu.umd.cs.findbugs.detect;
 
 import java.util.BitSet;
 
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.Code;
 import org.apache.bcel.generic.Type;
 
@@ -62,10 +62,10 @@ public class MethodReturnCheck extends OpcodeStackDetector implements UseAnnotat
 
     private static final BitSet INVOKE_OPCODE_SET = new BitSet();
     static {
-        INVOKE_OPCODE_SET.set(Constants.INVOKEINTERFACE);
-        INVOKE_OPCODE_SET.set(Constants.INVOKESPECIAL);
-        INVOKE_OPCODE_SET.set(Constants.INVOKESTATIC);
-        INVOKE_OPCODE_SET.set(Constants.INVOKEVIRTUAL);
+        INVOKE_OPCODE_SET.set(Const.INVOKEINTERFACE);
+        INVOKE_OPCODE_SET.set(Const.INVOKESPECIAL);
+        INVOKE_OPCODE_SET.set(Const.INVOKESTATIC);
+        INVOKE_OPCODE_SET.set(Const.INVOKEVIRTUAL);
     }
 
     boolean previousOpcodeWasNEW;
@@ -150,13 +150,13 @@ public class MethodReturnCheck extends OpcodeStackDetector implements UseAnnotat
     public void sawOpcode(int seen) {
 
         if (DEBUG) {
-            System.out.printf("%3d %10s %3s %s%n", getPC(), OPCODE_NAMES[seen], state, stack);
+            System.out.printf("%3d %10s %3s %s%n", getPC(), Const.getOpcodeName(seen), state, stack);
         }
 
         switch (seen) {
-        case Constants.IF_ICMPEQ:
+        case Const.IF_ICMPEQ:
 
-        case Constants.IF_ICMPNE:
+        case Const.IF_ICMPNE:
             OpcodeStack.Item left = stack.getStackItem(1);
             OpcodeStack.Item right = stack.getStackItem(0);
             if (badUseOfCompareResult(left, right)) {
@@ -175,7 +175,7 @@ public class MethodReturnCheck extends OpcodeStackDetector implements UseAnnotat
             break;
         }
 
-        checkForInitWithoutCopyOnStack: if (seen == INVOKESPECIAL && "<init>".equals(getNameConstantOperand())) {
+        checkForInitWithoutCopyOnStack: if (seen == Const.INVOKESPECIAL && "<init>".equals(getNameConstantOperand())) {
             int arguments = PreorderVisitor.getNumberArguments(getSigConstantOperand());
             OpcodeStack.Item invokedOn = stack.getStackItem(arguments);
             if (invokedOn.isNewlyAllocated() && (!"<init>".equals(getMethodName()) || invokedOn.getRegisterNumber() != 0)) {
@@ -210,10 +210,10 @@ public class MethodReturnCheck extends OpcodeStackDetector implements UseAnnotat
             state = SCAN;
         }
 
-        if (seen == NEW) {
+        if (seen == Const.NEW) {
             previousOpcodeWasNEW = true;
         } else {
-            if (seen == INVOKESPECIAL && previousOpcodeWasNEW) {
+            if (seen == Const.INVOKESPECIAL && previousOpcodeWasNEW) {
                 CheckReturnValueAnnotation annotation = checkReturnAnnotationDatabase.getResolvedAnnotation(callSeen, false);
                 if (annotation != null && annotation != CheckReturnValueAnnotation.CHECK_RETURN_VALUE_IGNORE) {
                     int priority = annotation.getPriority();
@@ -310,7 +310,7 @@ public class MethodReturnCheck extends OpcodeStackDetector implements UseAnnotat
     }
 
     private boolean isPop(int seen) {
-        return seen == Constants.POP || seen == Constants.POP2;
+        return seen == Const.POP || seen == Const.POP2;
     }
 
 }

@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.Repository;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
@@ -165,7 +165,7 @@ public class Hierarchy {
         if (!(ins instanceof InvokeInstruction)) {
             return false;
         }
-        if (ins.getOpcode() == Constants.INVOKESTATIC) {
+        if (ins.getOpcode() == Const.INVOKESTATIC) {
             return false;
         }
 
@@ -204,7 +204,7 @@ public class Hierarchy {
         if (!(ins instanceof InvokeInstruction)) {
             return false;
         }
-        if (ins.getOpcode() == Constants.INVOKESTATIC) {
+        if (ins.getOpcode() == Const.INVOKESTATIC) {
             return false;
         }
 
@@ -333,7 +333,7 @@ public class Hierarchy {
 
         short opcode = inv.getOpcode();
 
-        if (opcode == Constants.INVOKESTATIC) {
+        if (opcode == Const.INVOKESTATIC) {
             if (methodChooser == INSTANCE_METHOD) {
                 return null;
             }
@@ -344,7 +344,7 @@ public class Hierarchy {
         }
 
         // Find the method
-        if (opcode == Constants.INVOKESPECIAL) {
+        if (opcode == Const.INVOKESPECIAL) {
             // Non-virtual dispatch
             return findExactMethod(inv, cpg, methodChooser);
         } else {
@@ -364,7 +364,7 @@ public class Hierarchy {
 
             JavaClass jClass = Repository.lookupClass(className);
             return findInvocationLeastUpperBound(jClass, methodName, methodSig, methodChooser,
-                    opcode == Constants.INVOKEINTERFACE);
+                    opcode == Const.INVOKEINTERFACE);
 
         }
     }
@@ -556,7 +556,7 @@ public class Hierarchy {
 
     // FIXME: perhaps native methods should be concrete.
     public static boolean accessFlagsAreConcrete(int accessFlags) {
-        return (accessFlags & Constants.ACC_ABSTRACT) == 0 && (accessFlags & Constants.ACC_NATIVE) == 0;
+        return (accessFlags & Const.ACC_ABSTRACT) == 0 && (accessFlags & Const.ACC_NATIVE) == 0;
     }
 
     /**
@@ -715,7 +715,7 @@ public class Hierarchy {
 
         short opcode = invokeInstruction.getOpcode();
 
-        if (opcode == Constants.INVOKESTATIC) {
+        if (opcode == Const.INVOKESTATIC) {
             HashSet<JavaClassAndMethod> result = new HashSet<JavaClassAndMethod>();
             JavaClassAndMethod targetMethod = findInvocationLeastUpperBound(invokeInstruction, cpg, CONCRETE_METHOD);
             if (targetMethod != null) {
@@ -731,7 +731,7 @@ public class Hierarchy {
         Type receiverType;
         boolean receiverTypeIsExact;
 
-        if (opcode == Constants.INVOKESPECIAL) {
+        if (opcode == Const.INVOKESPECIAL) {
             // invokespecial instructions are dispatched to EXACTLY
             // the class specified by the instruction
             receiverType = ObjectTypeFactory.getInstance(invokeInstruction.getClassName(cpg));
@@ -792,7 +792,7 @@ public class Hierarchy {
             InvokeInstruction invokeInstruction, ConstantPoolGen cpg, boolean receiverTypeIsExact) throws ClassNotFoundException {
         HashSet<JavaClassAndMethod> result = new HashSet<JavaClassAndMethod>();
 
-        if (invokeInstruction.getOpcode() == Constants.INVOKESTATIC) {
+        if (invokeInstruction.getOpcode() == Const.INVOKESTATIC) {
             throw new IllegalArgumentException();
         }
 
@@ -835,7 +835,7 @@ public class Hierarchy {
         }
 
         // Is this a virtual call site?
-        boolean virtualCall = (invokeInstruction.getOpcode() == Constants.INVOKEVIRTUAL || invokeInstruction.getOpcode() == Constants.INVOKEINTERFACE)
+        boolean virtualCall = (invokeInstruction.getOpcode() == Const.INVOKEVIRTUAL || invokeInstruction.getOpcode() == Const.INVOKEINTERFACE)
                 && (upperBound == null || !upperBound.getJavaClass().isFinal() && !upperBound.getMethod().isFinal())
                 && !receiverTypeIsExact;
 
@@ -847,7 +847,7 @@ public class Hierarchy {
                 Set<ClassDescriptor> subTypeSet = analysisContext.getSubtypes2().getSubtypes(receiverDesc);
                 for (ClassDescriptor subtype : subTypeSet) {
                     XMethod concreteSubtypeMethod = findMethod(subtype, methodName, methodSig, false);
-                    if (concreteSubtypeMethod != null && (concreteSubtypeMethod.getAccessFlags() & Constants.ACC_ABSTRACT) == 0) {
+                    if (concreteSubtypeMethod != null && (concreteSubtypeMethod.getAccessFlags() & Const.ACC_ABSTRACT) == 0) {
                         result.add(new JavaClassAndMethod(concreteSubtypeMethod));
                     }
                 }
@@ -872,7 +872,7 @@ public class Hierarchy {
     @Deprecated
     public static boolean isConcrete(XMethod xmethod) {
         int accessFlags = xmethod.getAccessFlags();
-        return (accessFlags & Constants.ACC_ABSTRACT) == 0 && (accessFlags & Constants.ACC_NATIVE) == 0;
+        return (accessFlags & Const.ACC_ABSTRACT) == 0 && (accessFlags & Const.ACC_NATIVE) == 0;
     }
 
     /**
@@ -941,12 +941,12 @@ public class Hierarchy {
         String fieldName = fins.getFieldName(cpg);
         String fieldSig = fins.getSignature(cpg);
 
-        boolean isStatic = (fins.getOpcode() == Constants.GETSTATIC || fins.getOpcode() == Constants.PUTSTATIC);
+        boolean isStatic = (fins.getOpcode() == Const.GETSTATIC || fins.getOpcode() == Const.PUTSTATIC);
 
         XField xfield = findXField(className, fieldName, fieldSig, isStatic);
         short opcode = fins.getOpcode();
         if (xfield != null && xfield.isResolved()
-                && xfield.isStatic() == (opcode == Constants.GETSTATIC || opcode == Constants.PUTSTATIC)) {
+                && xfield.isStatic() == (opcode == Const.GETSTATIC || opcode == Const.PUTSTATIC)) {
             return xfield;
         } else {
             return null;

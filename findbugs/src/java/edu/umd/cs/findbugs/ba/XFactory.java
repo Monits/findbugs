@@ -29,7 +29,7 @@ import java.util.Set;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
@@ -44,7 +44,6 @@ import edu.umd.cs.findbugs.MethodAnnotation;
 import edu.umd.cs.findbugs.SystemProperties;
 import edu.umd.cs.findbugs.ba.obl.Obligation;
 import edu.umd.cs.findbugs.ba.obl.ObligationPolicyDatabase;
-import edu.umd.cs.findbugs.ba.obl.ObligationPolicyDatabaseEntry;
 import edu.umd.cs.findbugs.ba.obl.ObligationPolicyDatabaseEntryType;
 import edu.umd.cs.findbugs.classfile.CheckedAnalysisException;
 import edu.umd.cs.findbugs.classfile.ClassDescriptor;
@@ -233,6 +232,14 @@ public class XFactory {
     }
 
     /**
+     * @deprecated Just use the string directly
+     */
+    @Deprecated
+    public static String canonicalizeString(String s) {
+        return DescriptorFactory.canonicalizeString(s);
+    }
+
+    /**
      * Create an XMethod object from a BCEL Method.
      *
      * @param className
@@ -254,7 +261,7 @@ public class XFactory {
      * Create a new, never-before-seen, XMethod object and intern it.
      */
     private static XMethod createXMethod(@DottedClassName String className, String methodName, String methodSig, int accessFlags) {
-        return createXMethod(className, methodName, methodSig, (accessFlags & Constants.ACC_STATIC) != 0);
+        return createXMethod(className, methodName, methodSig, (accessFlags & Const.ACC_STATIC) != 0);
     }
 
     /**
@@ -389,7 +396,7 @@ public class XFactory {
                 if (methodHasCloseInName) {
                     // Method has "close" in its name.
                     // Assume that it deletes the obligation.
-                    ObligationPolicyDatabaseEntry entry = database.addParameterDeletesObligationDatabaseEntry(xmethod,
+                    database.addParameterDeletesObligationDatabaseEntry(xmethod,
                             obligationType, ObligationPolicyDatabaseEntryType.STRONG);
 
                 } else {
@@ -405,7 +412,7 @@ public class XFactory {
                     if ("<init>".equals(methodName) || methodName.startsWith("access$") || xmethod.isStatic()
                             || methodName.toLowerCase().indexOf("close") >= 0
                             || xmethod.getSignature().toLowerCase().indexOf("Closeable") >= 0) {
-                        ObligationPolicyDatabaseEntry entry = database.addParameterDeletesObligationDatabaseEntry(xmethod,
+                        database.addParameterDeletesObligationDatabaseEntry(xmethod,
                                 obligationType, ObligationPolicyDatabaseEntryType.WEAK);
                     }
                 }
@@ -461,7 +468,7 @@ public class XFactory {
         String fieldSig = fieldInstruction.getSignature(cpg);
 
         int opcode = fieldInstruction.getOpcode();
-        return createXField(className, fieldName, fieldSig, opcode == Constants.GETSTATIC || opcode == Constants.PUTSTATIC);
+        return createXField(className, fieldName, fieldSig, opcode == Const.GETSTATIC || opcode == Const.PUTSTATIC);
     }
 
     public static XField createReferencedXField(DismantleBytecode visitor) {
@@ -475,7 +482,7 @@ public class XFactory {
 
     public static XMethod createReferencedXMethod(DismantleBytecode visitor) {
         XMethod m = createXMethodUsingSlashedClassName(visitor.getClassConstantOperand(), visitor.getNameConstantOperand(),
-                visitor.getSigConstantOperand(), visitor.getOpcode() == Constants.INVOKESTATIC);
+                visitor.getSigConstantOperand(), visitor.getOpcode() == Const.INVOKESTATIC);
         return m.resolveAccessMethodForMethod();
     }
 
@@ -608,7 +615,7 @@ public class XFactory {
         String methodName = invokeInstruction.getName(cpg);
         String methodSig = invokeInstruction.getSignature(cpg);
 
-        return createXMethod(className, methodName, methodSig, invokeInstruction.getOpcode() == Constants.INVOKESTATIC);
+        return createXMethod(className, methodName, methodSig, invokeInstruction.getOpcode() == Const.INVOKESTATIC);
     }
 
     /**

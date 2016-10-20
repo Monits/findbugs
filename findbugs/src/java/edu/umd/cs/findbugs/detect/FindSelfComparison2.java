@@ -1,10 +1,9 @@
 package edu.umd.cs.findbugs.detect;
 
-import static org.apache.bcel.Constants.*;
-
 import java.util.BitSet;
 import java.util.Iterator;
 
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.Instruction;
@@ -83,8 +82,8 @@ public class FindSelfComparison2 implements Detector {
 
             Instruction ins = location.getHandle().getInstruction();
             switch (ins.getOpcode()) {
-            case INVOKEVIRTUAL:
-            case INVOKEINTERFACE:
+            case Const.INVOKEVIRTUAL:
+            case Const.INVOKEINTERFACE:
                 InvokeInstruction iins = (InvokeInstruction) ins;
                 String invoking = iins.getName(cpg);
                 if ( comparatorMethod(invoking) || booleanComparisonMethod(invoking) ) {
@@ -97,7 +96,7 @@ public class FindSelfComparison2 implements Detector {
                     if (classContext.getJavaClass().getSuperclassName().toLowerCase().indexOf("test") >= 0) {
                         break;
                     }
-                    if (location.getHandle().getNext().getInstruction().getOpcode() == POP) {
+                    if (location.getHandle().getNext().getInstruction().getOpcode() == Const.POP) {
                         break;
                     }
                     String sig = iins.getSignature(cpg);
@@ -112,30 +111,30 @@ public class FindSelfComparison2 implements Detector {
                 }
                 break;
 
-            case LOR:
-            case LAND:
-            case LXOR:
-            case LSUB:
-            case IOR:
-            case IAND:
-            case IXOR:
-            case ISUB:
+            case Const.LOR:
+            case Const.LAND:
+            case Const.LXOR:
+            case Const.LSUB:
+            case Const.IOR:
+            case Const.IAND:
+            case Const.IXOR:
+            case Const.ISUB:
                 checkForSelfOperation(classContext, location, valueNumberDataflow, "COMPUTATION", method, methodGen, sourceFile);
                 break;
-            case FCMPG:
-            case DCMPG:
-            case DCMPL:
-            case FCMPL:
+            case Const.FCMPG:
+            case Const.DCMPG:
+            case Const.DCMPL:
+            case Const.FCMPL:
                 break;
-            case LCMP:
-            case IF_ACMPEQ:
-            case IF_ACMPNE:
-            case IF_ICMPNE:
-            case IF_ICMPEQ:
-            case IF_ICMPGT:
-            case IF_ICMPLE:
-            case IF_ICMPLT:
-            case IF_ICMPGE:
+            case Const.LCMP:
+            case Const.IF_ACMPEQ:
+            case Const.IF_ACMPNE:
+            case Const.IF_ICMPNE:
+            case Const.IF_ICMPEQ:
+            case Const.IF_ICMPGT:
+            case Const.IF_ICMPLE:
+            case Const.IF_ICMPLT:
+            case Const.IF_ICMPGE:
                 checkForSelfOperation(classContext, location, valueNumberDataflow, "COMPARISON", method, methodGen, sourceFile);
                 break;
             default:
@@ -162,7 +161,7 @@ public class FindSelfComparison2 implements Detector {
         Instruction ins = location.getHandle().getInstruction();
         int opcode = ins.getOpcode();
         int offset = 1;
-        if (opcode == LCMP || opcode == LXOR || opcode == LAND || opcode == LOR || opcode == LSUB) {
+        if (opcode == Const.LCMP || opcode == Const.LXOR || opcode == Const.LAND || opcode == Const.LOR || opcode == Const.LSUB) {
             offset = 2;
         }
         ValueNumber v0 = frame.getStackValue(0);
@@ -175,7 +174,7 @@ public class FindSelfComparison2 implements Detector {
         }
 
         int priority = HIGH_PRIORITY;
-        if (opcode == ISUB || opcode == LSUB || opcode == INVOKEINTERFACE || opcode == INVOKEVIRTUAL) {
+        if (opcode == Const.ISUB || opcode == Const.LSUB || opcode == Const.INVOKEINTERFACE || opcode == Const.INVOKEVIRTUAL) {
             priority = NORMAL_PRIORITY;
         }
         XField field = ValueNumberSourceInfo.findXFieldFromValueNumber(method, location, v0, frame);
@@ -193,7 +192,7 @@ public class FindSelfComparison2 implements Detector {
         } else {
             annotation = ValueNumberSourceInfo.findLocalAnnotationFromValueNumber(method, location, v0, frame);
             prefix = "SA_LOCAL_SELF_";
-            if (opcode == ISUB) {
+            if (opcode == Const.ISUB) {
                 return; // only report this if simple detector reports it
             }
         }

@@ -19,8 +19,6 @@
 
 package edu.umd.cs.findbugs.detect;
 
-import static org.apache.bcel.Constants.*;
-
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.LocalVariable;
 import org.apache.bcel.classfile.LocalVariableTable;
 import org.apache.bcel.classfile.Method;
@@ -506,11 +505,11 @@ public class FindUselessObjects implements Detector {
                         Set<ValueInfo> vals = context.getLiveVals(vn);
                         if(vals != null) {
                             switch(inst.getOpcode()) {
-                            case ASTORE:
-                            case ASTORE_0:
-                            case ASTORE_1:
-                            case ASTORE_2:
-                            case ASTORE_3:
+                            case Const.ASTORE:
+                            case Const.ASTORE_0:
+                            case Const.ASTORE_1:
+                            case Const.ASTORE_2:
+                            case Const.ASTORE_3:
                                 for(ValueInfo vi : vals) {
                                     if(vi.var == null && vi.origValue == vn.getNumber()) {
                                         int index = ((StoreInstruction)inst).getIndex();
@@ -521,115 +520,115 @@ public class FindUselessObjects implements Detector {
                                     }
                                 }
                                 break;
-                            case POP:
-                            case POP2:
-                            case DUP:
-                            case DUP2:
-                            case DUP_X1:
-                            case DUP2_X1:
-                            case ISTORE:
-                            case ISTORE_0:
-                            case ISTORE_1:
-                            case ISTORE_2:
-                            case ISTORE_3:
-                            case LSTORE:
-                            case LSTORE_0:
-                            case LSTORE_1:
-                            case LSTORE_2:
-                            case LSTORE_3:
-                            case FSTORE:
-                            case FSTORE_0:
-                            case FSTORE_1:
-                            case FSTORE_2:
-                            case FSTORE_3:
-                            case DSTORE:
-                            case DSTORE_0:
-                            case DSTORE_1:
-                            case DSTORE_2:
-                            case DSTORE_3:
-                            case SWAP:
-                            case IMPDEP1:
-                            case IMPDEP2:
-                            case CHECKCAST:
-                            case MONITORENTER:
+                            case Const.POP:
+                            case Const.POP2:
+                            case Const.DUP:
+                            case Const.DUP2:
+                            case Const.DUP_X1:
+                            case Const.DUP2_X1:
+                            case Const.ISTORE:
+                            case Const.ISTORE_0:
+                            case Const.ISTORE_1:
+                            case Const.ISTORE_2:
+                            case Const.ISTORE_3:
+                            case Const.LSTORE:
+                            case Const.LSTORE_0:
+                            case Const.LSTORE_1:
+                            case Const.LSTORE_2:
+                            case Const.LSTORE_3:
+                            case Const.FSTORE:
+                            case Const.FSTORE_0:
+                            case Const.FSTORE_1:
+                            case Const.FSTORE_2:
+                            case Const.FSTORE_3:
+                            case Const.DSTORE:
+                            case Const.DSTORE_0:
+                            case Const.DSTORE_1:
+                            case Const.DSTORE_2:
+                            case Const.DSTORE_3:
+                            case Const.SWAP:
+                            case Const.IMPDEP1:
+                            case Const.IMPDEP2:
+                            case Const.CHECKCAST:
+                            case Const.MONITORENTER:
                                 break;
-                            case IADD:
-                            case LADD:
-                            case FADD:
-                            case DADD:
-                            case ISUB:
-                            case LSUB:
-                            case FSUB:
-                            case DSUB:
-                            case IMUL:
-                            case DMUL:
-                            case LMUL:
-                            case FMUL:
-                            case IDIV:
-                            case DDIV:
-                            case LDIV:
-                            case FDIV:
-                            case INEG:
-                            case LNEG:
-                            case FNEG:
-                            case DNEG:
-                            case IREM:
-                            case LREM:
-                            case FREM:
-                            case DREM:
-                            case ISHL:
-                            case LSHL:
-                            case ISHR:
-                            case LSHR:
-                            case IUSHR:
-                            case LUSHR:
-                            case IAND:
-                            case LAND:
-                            case IOR:
-                            case LOR:
-                            case IXOR:
-                            case LXOR:
-                            case I2L:
-                            case I2F:
-                            case I2D:
-                            case L2I:
-                            case L2F:
-                            case L2D:
-                            case F2I:
-                            case F2L:
-                            case F2D:
-                            case D2I:
-                            case D2L:
-                            case D2F:
-                            case I2B:
-                            case I2C:
-                            case I2S:
-                            case LCMP:
-                            case FCMPL:
-                            case FCMPG:
-                            case DCMPL:
-                            case DCMPG:
-                            case ARRAYLENGTH:
+                            case Const.IADD:
+                            case Const.LADD:
+                            case Const.FADD:
+                            case Const.DADD:
+                            case Const.ISUB:
+                            case Const.LSUB:
+                            case Const.FSUB:
+                            case Const.DSUB:
+                            case Const.IMUL:
+                            case Const.DMUL:
+                            case Const.LMUL:
+                            case Const.FMUL:
+                            case Const.IDIV:
+                            case Const.DDIV:
+                            case Const.LDIV:
+                            case Const.FDIV:
+                            case Const.INEG:
+                            case Const.LNEG:
+                            case Const.FNEG:
+                            case Const.DNEG:
+                            case Const.IREM:
+                            case Const.LREM:
+                            case Const.FREM:
+                            case Const.DREM:
+                            case Const.ISHL:
+                            case Const.LSHL:
+                            case Const.ISHR:
+                            case Const.LSHR:
+                            case Const.IUSHR:
+                            case Const.LUSHR:
+                            case Const.IAND:
+                            case Const.LAND:
+                            case Const.IOR:
+                            case Const.LOR:
+                            case Const.IXOR:
+                            case Const.LXOR:
+                            case Const.I2L:
+                            case Const.I2F:
+                            case Const.I2D:
+                            case Const.L2I:
+                            case Const.L2F:
+                            case Const.L2D:
+                            case Const.F2I:
+                            case Const.F2L:
+                            case Const.F2D:
+                            case Const.D2I:
+                            case Const.D2L:
+                            case Const.D2F:
+                            case Const.I2B:
+                            case Const.I2C:
+                            case Const.I2S:
+                            case Const.LCMP:
+                            case Const.FCMPL:
+                            case Const.FCMPG:
+                            case Const.DCMPL:
+                            case Const.DCMPG:
+                            case Const.ARRAYLENGTH:
                                 changed |= context.propagateValues(vals, null, location.frameAfter().getTopValue());
                                 break;
-                            case GETFIELD:
-                            case AALOAD:
-                            case DALOAD:
-                            case BALOAD:
-                            case CALOAD:
-                            case LALOAD:
-                            case SALOAD:
-                            case IALOAD:
+                            case Const.GETFIELD:
+                            case Const.AALOAD:
+                            case Const.DALOAD:
+                            case Const.BALOAD:
+                            case Const.CALOAD:
+                            case Const.LALOAD:
+                            case Const.SALOAD:
+                            case Const.IALOAD:
                                 changed |= context.propagateValues(vals, vn, location.frameAfter().getTopValue());
                                 break;
-                            case AASTORE:
-                            case DASTORE:
-                            case BASTORE:
-                            case CASTORE:
-                            case LASTORE:
-                            case SASTORE:
-                            case IASTORE:
-                            case PUTFIELD:
+                            case Const.AASTORE:
+                            case Const.DASTORE:
+                            case Const.BASTORE:
+                            case Const.CASTORE:
+                            case Const.LASTORE:
+                            case Const.SASTORE:
+                            case Const.IASTORE:
+                            case Const.PUTFIELD:
                                 if(i == 0) {
                                     ValueNumber value = vns[vns.length-1];
                                     if(!value.hasFlag(ValueNumber.CONSTANT_VALUE) && !value.hasFlag(ValueNumber.CONSTANT_CLASS_OBJECT) &&
@@ -645,10 +644,10 @@ public class FindUselessObjects implements Detector {
                                     }
                                 }
                                 break;
-                            case INVOKESTATIC:
-                            case INVOKESPECIAL:
-                            case INVOKEINTERFACE:
-                            case INVOKEVIRTUAL:
+                            case Const.INVOKESTATIC:
+                            case Const.INVOKESPECIAL:
+                            case Const.INVOKEINTERFACE:
+                            case Const.INVOKEVIRTUAL:
                                 MethodDescriptor m = new MethodDescriptor((InvokeInstruction) inst, context.cpg);
                                 XMethod xMethod = null;
                                 try {

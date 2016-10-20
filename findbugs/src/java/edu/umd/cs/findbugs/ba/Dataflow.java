@@ -202,6 +202,7 @@ public class Dataflow<Fact, AnalysisType extends DataflowAnalysis<Fact>> {
                     debug(block, "rBlockOrder " + rBlockOrder.rdfs.getDiscoveryTime(block) + "\n");
                 }
             }
+// FIXME : WTF? Por qué se copia a un TreeSet??
             Iterator<BasicBlock> i = blockOrder.blockIterator();
             if (numIterations > 3 && numIterations % 2 == 0 && blockOrder instanceof ReverseDFSOrder) {
                 if (DEBUG) {

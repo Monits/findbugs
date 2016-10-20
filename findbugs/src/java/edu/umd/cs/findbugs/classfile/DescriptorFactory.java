@@ -68,6 +68,14 @@ public class DescriptorFactory {
     }
 
     /**
+     * @deprecated Just use the string directly, this method is now an identity function
+     */
+    @Deprecated
+    public static String canonicalizeString(String s) {
+        return s;
+    }
+
+    /**
      * Get the singleton instance of the DescriptorFactory.
      *
      * @return the singleton instance of the DescriptorFactory

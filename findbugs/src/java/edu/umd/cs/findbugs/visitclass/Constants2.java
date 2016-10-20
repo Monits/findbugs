@@ -19,6 +19,12 @@
 
 package edu.umd.cs.findbugs.visitclass;
 
+import org.apache.bcel.Const;
+
+/**
+ * @deprecated use BCEL's {@link Const} directly
+ */
+@Deprecated
 public interface Constants2 extends org.apache.bcel.Constants {
 
     // Nothing defined here for now
