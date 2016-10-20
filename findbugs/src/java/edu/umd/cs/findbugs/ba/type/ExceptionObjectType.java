@@ -29,10 +29,6 @@ import org.apache.bcel.generic.Type;
  * are explicit or implicit.
  */
 public class ExceptionObjectType extends ObjectType implements Constants, ExtendedTypes {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
 
     private final ExceptionSet exceptionSet;
 

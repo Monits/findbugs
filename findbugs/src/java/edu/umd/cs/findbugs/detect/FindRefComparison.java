@@ -211,8 +211,6 @@ public class FindRefComparison implements Detector, ExtendedTypes {
      * should never be compared using reference equality.
      */
     public static class DynamicStringType extends ObjectType {
-        private static final long serialVersionUID = 1L;
-
         public DynamicStringType() {
             super("java.lang.String");
         }
@@ -239,8 +237,6 @@ public class FindRefComparison implements Detector, ExtendedTypes {
     }
 
     public static class FinalConstant extends ObjectType {
-        private static final long serialVersionUID = 1L;
-
         final @Nonnull
         XField field;
 
@@ -286,8 +282,6 @@ public class FindRefComparison implements Detector, ExtendedTypes {
      * reference equality.
      */
     public static class StaticStringType extends ObjectType {
-        private static final long serialVersionUID = 1L;
-
         public StaticStringType() {
             super("java.lang.String");
         }
@@ -316,8 +310,6 @@ public class FindRefComparison implements Detector, ExtendedTypes {
     private static final Type staticStringTypeInstance = new StaticStringType();
 
     public static class EmptyStringType extends StaticStringType {
-        private static final long serialVersionUID = 1L;
-
         public EmptyStringType() {
             super();
         }
@@ -350,8 +342,6 @@ public class FindRefComparison implements Detector, ExtendedTypes {
      * Type representing a String passed as a parameter.
      */
     public static class ParameterStringType extends ObjectType {
-        private static final long serialVersionUID = 1L;
-
         public ParameterStringType() {
             super("java.lang.String");
         }

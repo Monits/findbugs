@@ -49,8 +49,6 @@ import edu.umd.cs.findbugs.SystemProperties;
 public class URLClassPathRepository implements Repository {
     public static final boolean DEBUG = SystemProperties.getBoolean("findbugs.classpath.debug");
 
-    private static final long serialVersionUID = 1L;
-
     private final Map<String, JavaClass> nameToClassMap;
 
     private final URLClassPath urlClassPath;
