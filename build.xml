@@ -1,4 +1,7 @@
 <project name="findbugs root" default="all">
+    <target name="echoprops">
+      <echoproperties/>
+    </target>
 
     <target name="all" depends="build,test"/>
 

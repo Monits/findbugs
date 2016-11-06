@@ -11,6 +11,7 @@ install:
   - tar xzvf eclipse-3.6.2-linux64.tar.gz eclipse
   - echo eclipsePlugin.dir=$(pwd)/eclipse/plugins > eclipsePlugin/local.properties
 script:
+  - sh -x `which ant` echoprops
   - ant build
 #  - jdk_switcher use $JDK_FOR_TEST
   - ant test
